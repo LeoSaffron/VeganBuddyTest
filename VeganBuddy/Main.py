@@ -4,9 +4,12 @@
     This is where it starts, and gets its actions defined.
 """
 import sys
-import json
 from wit import Wit
 from BL.NutritionValues.NutritionValues import *
+from Configurations.JSONConfigurationReader import *
+import time
+
+CONF_FILE_PATH = "Configurations/JSON_files/general_configurations.json"
 
 
 class BotActions(object):
@@ -18,10 +21,7 @@ class BotActions(object):
         self.actions = {
             'send': self.send,
             'get_nutrition_value': NutritionValues.get_nutrition_value,
-            #'get_animal_eat': class_name.get_animal_eat,
-            #'get_protein_amount_by_food': get_protein_amount_by_food
         }
-
         self.client = Wit(access_token=self.access_token, actions=self.actions)
         self.client.interactive()
 
@@ -40,23 +40,27 @@ class BotActions(object):
 
 
 def main(access_token):
-    facebook_bot = BotActions(access_token)
+    BotActions(access_token)
 
-if __name__ == "__main__":
+
+def call_main():
+    """
+    Calling main and ensuring that the user
+    entered the right amount of variables.
+    """
     if len(sys.argv) > 2:
         print 'usage: python ' + sys.argv[0] + ' <config-file>'
+        time.sleep(3)
         exit(1)
     elif len(sys.argv) == 1:
         print "Trying to get default config file"
-        with open("Configurations/config.json") as json_conf_file:
-            CONF = json.load(json_conf_file)
-        ACCESS_TOKEN = CONF['access_token']
+        general_configurations = JSONConfigurationReader().read_json_configuration(CONF_FILE_PATH)
+        ACCESS_TOKEN = general_configurations['access_token']
         print "TOKEN: %s" % ACCESS_TOKEN
         main(ACCESS_TOKEN)
     else:
-        print "Using access_token from %s" % sys.argv[1]
-        with open(sys.argv[1]) as json_conf_file:
-            CONF = json.load(json_conf_file)
-        ACCESS_TOKEN = CONF['access_token']
-        print "TOKEN: %s" % ACCESS_TOKEN
-        main(ACCESS_TOKEN)
+        print "Using given access_token: ".format(sys.argv[1],)
+        main(sys.argv[1])
+
+if __name__ == "__main__":
+    call_main()
