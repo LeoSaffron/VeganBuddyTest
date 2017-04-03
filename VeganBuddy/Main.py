@@ -16,7 +16,8 @@ class BotActions(object):
     """
     An object of a veganBuddy bot.
     """
-    def __init__(self, access_token):
+    def __init__(self, access_token, general_configurations):
+        self.general_configurations = general_configurations
         self.access_token = access_token
         self.actions = {
             'send': self.send,
@@ -39,8 +40,8 @@ class BotActions(object):
         return val['value'] if isinstance(val, dict) else val
 
 
-def main(access_token):
-    BotActions(access_token)
+def main(access_token, general_configurations):
+    BotActions(access_token, general_configurations)
 
 
 def call_main():
@@ -57,7 +58,7 @@ def call_main():
         general_configurations = JSONConfigurationReader().read_json_configuration(CONF_FILE_PATH)
         ACCESS_TOKEN = general_configurations['access_token']
         print "TOKEN: %s" % ACCESS_TOKEN
-        main(ACCESS_TOKEN)
+        main(ACCESS_TOKEN, general_configurations)
     else:
         print "Using given access_token: ".format(sys.argv[1],)
         main(sys.argv[1])

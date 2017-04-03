@@ -1,6 +1,6 @@
 # Vegan Buddy
 
-Vegan Buddy is a bot made to help vegans and people interested in veganism find relevant informations.
+Vegan Buddy is a bot made to help vegans and people interested in veganism to find relevant information.
 
 ## Installation
 
