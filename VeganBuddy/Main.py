@@ -8,8 +8,11 @@ from wit import Wit
 from BL.NutritionValues.NutritionValues import *
 from Configurations.JSONConfigurationReader import *
 import time
+import json
+import db_connection
 
 CONF_FILE_PATH = "Configurations/JSON_files/general_configurations.json"
+DB_CONNDECT_FILE="Configurations/JSON_files/database_configurations.json"
 
 
 class BotActions(object):
@@ -41,6 +44,15 @@ class BotActions(object):
 
 
 def main(access_token, general_configurations):
+    db = db_connection.db_connection()
+    db_data = {
+        'database_name' : "great_library",
+        'hostname' : "localhost",
+        'username' : "test_veganbuddy",
+        'password' : "redhat",
+    }
+
+    db.set_database_parameters(db_data['database_name'], db_data['hostname'], db_data['username'], db_data['password'] )
     BotActions(access_token, general_configurations)
 
 
